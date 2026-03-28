@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Journey to Mars — Frontend Odyssey</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <div id="loader">
+    <div class="loader-inner">
+      <div class="loader-ring">
+        <svg viewBox="0 0 120 120" class="loader-svg">
+          <circle class="track" cx="60" cy="60" r="54" />
+          <circle class="progress-ring" cx="60" cy="60" r="54" />
+        </svg>
+        <div class="loader-icon">
+          <svg viewBox="0 0 60 100" xmlns="http://www.w3.org/2000/svg" class="mini-rocket">
+            <path d="M30,5 Q45,5 45,40 L45,70 L30,80 L15,70 L15,40 Q15,5 30,5Z" fill="#d4d4d4"/>
+            <path d="M15,55 L2,80 Q10,72 15,68Z" fill="#b22200"/>
+            <path d="M45,55 L58,80 Q50,72 45,68Z" fill="#b22200"/>
+            <circle cx="30" cy="30" r="8" fill="#4e9de8" stroke="#fff" stroke-width="1.5"/>
+            <ellipse cx="30" cy="82" rx="10" ry="6" fill="#ff6600" opacity="0.9"/>
+            <ellipse cx="30" cy="86" rx="6" ry="8" fill="#ffcc00" opacity="0.7"/>
+          </svg>
+        </div>
+      </div>
+      <div class="loader-status">
+        <span class="loader-label">MISSION CONTROL</span>
+        <span class="loader-msg" id="loader-msg">INITIALIZING SYSTEMS…</span>
+      </div>
+      <div class="loader-bar-wrap"><div class="loader-bar" id="loader-bar"></div></div>
+    </div>
+  </div>
+
+  <div id="cursor"></div>
+  <div id="cursor-trail"></div>
+
+  <nav class="mission-nav" id="mission-nav">
+    <div class="nav-brand">
+      <span class="nav-logo">⬡</span>
+      <span class="nav-title">MARS ODYSSEY</span>
+    </div>
+    <div class="nav-dots">
+      <button class="nav-dot active" data-section="launch" title="Launch Pad">
+        <span class="dot-label">01 LAUNCH</span>
+      </button>
+      <button class="nav-dot" data-section="ascent" title="Ascent">
+        <span class="dot-label">02 ASCENT</span>
+      </button>
+      <button class="nav-dot" data-section="traverse" title="Deep Space">
+        <span class="dot-label">03 TRAVERSE</span>
+      </button>
+      <button class="nav-dot" data-section="arrival" title="Mars Arrival">
+        <span class="dot-label">04 ARRIVAL</span>
+      </button>
+      <button class="nav-dot" data-section="exploration" title="Exploration">
+        <span class="dot-label">05 EXPLORE</span>
+      </button>
+    </div>
+  </nav>
+
+  <div class="mission-progress-wrap">
+    <div class="mission-progress-bar" id="mission-progress-bar"></div>
+    <span class="mission-progress-label" id="progress-label">0% COMPLETE</span>
+  </div>
+
+  <canvas id="stars-bg"></canvas>
+
+  <section id="launch" class="section section--launch">
+    <canvas id="earth-canvas"></canvas>
+
+    <div class="launch-content">
+      <div class="launch-badge">
+        <span class="badge-line">MISSION: ARTEMIS-IX</span>
+        <span class="badge-line">CREW: 6 | LAUNCH WINDOW: OPEN</span>
+      </div>
+
+      <h1 class="launch-title">
+        <span class="title-sub">JOURNEY TO</span>
+        <span class="title-main">MARS</span>
+      </h1>
+
+      <p class="launch-desc">
+        54.6 million kilometres of void. One shot at history.<br />
+        The most ambitious human expedition ever attempted.
+      </p>
+
+      <div class="countdown-block">
+        <div class="countdown-item">
+          <span class="cd-num" id="cd-d">00</span>
+          <span class="cd-lbl">DAYS</span>
+        </div>
+        <div class="cd-sep">:</div>
+        <div class="countdown-item">
+          <span class="cd-num" id="cd-h">00</span>
+          <span class="cd-lbl">HRS</span>
+        </div>
+        <div class="cd-sep">:</div>
+        <div class="countdown-item">
+          <span class="cd-num" id="cd-m">00</span>
+          <span class="cd-lbl">MIN</span>
+        </div>
+        <div class="cd-sep">:</div>
+        <div class="countdown-item">
+          <span class="cd-num" id="cd-s">00</span>
+          <span class="cd-lbl">SEC</span>
+        </div>
+      </div>
+
+      <div class="launch-actions">
+        <button class="btn-launch" id="btn-launch">
+          <span class="btn-text">INITIATE LAUNCH</span>
+          <span class="btn-glow"></span>
+        </button>
+        <span class="launch-hint">↓ SCROLL TO BEGIN</span>
+      </div>
+    </div>
+
+    <div class="launch-data">
+      <div class="data-pill">
+        <span class="data-key">VEHICLE</span>
+        <span class="data-val">STARSHIP ITS-9</span>
+      </div>
+      <div class="data-pill">
+        <span class="data-key">DESTINATION</span>
+        <span class="data-val">MARS ORBIT</span>
+      </div>
+      <div class="data-pill">
+        <span class="data-key">STATUS</span>
+        <span class="data-val blink-green">GO FOR LAUNCH</span>
+      </div>
+    </div>
+
+    <div class="scroll-indicator">
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <section id="ascent" class="section section--ascent">
+    <div class="ascent-bg-strip"></div>
+
+    <div class="ascent-left">
+      <div class="ascent-clock">
+        <span class="clock-label">MISSION ELAPSED</span>
+        <span class="clock-time" id="mission-clock">T+ 00:00:00</span>
+      </div>
+      <h2 class="section-heading">
+        <span class="sh-num">02</span>
+        <span class="sh-text">BREAKING<br />FREE</span>
+      </h2>
+      <p class="section-body">
+        At ignition, six Raptor engines produce over 7,500 tonnes of thrust, 
+        accelerating the crew to escape velocity — <strong>11.2 km/s</strong> —
+        punching through the atmosphere in under nine minutes.
+      </p>
+
+      <div class="ascent-stats">
+        <div class="astat">
+          <span class="astat-val">11.2</span>
+          <span class="astat-unit">km/s</span>
+          <span class="astat-lbl">Escape Velocity</span>
+        </div>
+        <div class="astat">
+          <span class="astat-val">7,500</span>
+          <span class="astat-unit">tonnes</span>
+          <span class="astat-lbl">Thrust</span>
+        </div>
+        <div class="astat">
+          <span class="astat-val">8:42</span>
+          <span class="astat-unit">min</span>
+          <span class="astat-lbl">To Orbit</span>
+        </div>
+      </div>
+
+      <div class="phase-tags">
+        <span class="phase-tag done">Launch</span>
+        <span class="phase-tag done">Max-Q</span>
+        <span class="phase-tag active">MECO</span>
+        <span class="phase-tag">Trans-Mars Inject</span>
+      </div>
+    </div>
+
+    <div class="ascent-right">
+      <div class="rocket-wrap" id="rocket-wrap">
+        <div class="exhaust-particles" id="exhaust"></div>
+        <svg id="rocket-svg" viewBox="0 0 120 300" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="bodyG" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#9ca3af"/>
+              <stop offset="40%" stop-color="#e5e7eb"/>
+              <stop offset="100%" stop-color="#9ca3af"/>
+            </linearGradient>
+            <linearGradient id="noseG" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#6b7280"/>
+              <stop offset="50%" stop-color="#d1d5db"/>
+              <stop offset="100%" stop-color="#6b7280"/>
+            </linearGradient>
+            <linearGradient id="finG" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#b22200"/>
+              <stop offset="100%" stop-color="#e03010"/>
+            </linearGradient>
+            <radialGradient id="flameG" cx="50%" cy="0%" r="100%">
+              <stop offset="0%" stop-color="#ffffff"/>
+              <stop offset="30%" stop-color="#ffee44"/>
+              <stop offset="70%" stop-color="#ff6600"/>
+              <stop offset="100%" stop-color="transparent"/>
+            </radialGradient>
+            <radialGradient id="glowG" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#ff4400" stop-opacity="0.6"/>
+              <stop offset="100%" stop-color="#ff4400" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+
+          <!-- Glow -->
+          <ellipse cx="60" cy="265" rx="40" ry="25" fill="url(#glowG)"/>
+
+          <!-- Flame outer -->
+          <ellipse cx="60" cy="258" rx="22" ry="30" fill="url(#flameG)" class="flame-outer"/>
+
+          <rect x="42" y="230" width="36" height="18" rx="5" fill="#4b5563"/>
+          <rect x="46" y="234" width="28" height="10" rx="3" fill="#374151"/>
+
+          <path d="M30,195 L4,250 Q18,238 30,235Z" fill="url(#finG)"/>
+          <path d="M90,195 L116,250 Q102,238 90,235Z" fill="url(#finG)"/>
+
+          <rect x="28" y="82" width="64" height="152" rx="10" fill="url(#bodyG)"/>
+
+          <line x1="50" y1="82" x2="50" y2="234" stroke="#9ca3af" stroke-width="0.5" opacity="0.5"/>
+          <line x1="70" y1="82" x2="70" y2="234" stroke="#9ca3af" stroke-width="0.5" opacity="0.5"/>
+          <line x1="28" y1="140" x2="92" y2="140" stroke="#9ca3af" stroke-width="0.5" opacity="0.3"/>
+          <line x1="28" y1="180" x2="92" y2="180" stroke="#9ca3af" stroke-width="0.5" opacity="0.3"/>
+
+          <rect x="34" y="155" width="52" height="20" rx="3" fill="#1e3a5f" opacity="0.8"/>
+          <text x="60" y="169" text-anchor="middle" font-family="monospace" font-size="7" fill="#60a5fa">STARSHIP ITS-9</text>
+
+          <circle cx="60" cy="110" r="13" fill="#1e3a5f" stroke="#93c5fd" stroke-width="2"/>
+          <circle cx="60" cy="110" r="9" fill="#2563eb" opacity="0.7"/>
+          <circle cx="55" cy="106" r="3" fill="#bfdbfe" opacity="0.6"/>
+
+          <circle cx="60" cy="135" r="6" fill="#1e3a5f" stroke="#93c5fd" stroke-width="1.5"/>
+          <circle cx="60" cy="135" r="4" fill="#1d4ed8" opacity="0.6"/>
+
+          <path d="M28,82 Q60,-15 92,82Z" fill="url(#noseG)"/>
+
+          <circle cx="60" cy="20" r="4" fill="white" opacity="0.3"/>
+
+<rect x="76" y="100" width="12" height="8" fill="#138808"/>
+<rect x="76" y="100" width="12" height="2.67" fill="#FF9933"/>
+<rect x="76" y="102.67" width="12" height="2.67" fill="#FFFFFF"/>
+
+<circle cx="82" cy="104" r="1.1" fill="none" stroke="#000080" stroke-width="0.3"/>
+<circle cx="82" cy="104" r="0.25" fill="#000080"/>
+<line x1="82" y1="102.9" x2="82" y2="105.1" stroke="#000080" stroke-width="0.2"/>
+<line x1="80.9" y1="104" x2="83.1" y2="104" stroke="#000080" stroke-width="0.2"/>
+<line x1="81.22" y1="102.92" x2="82.78" y2="105.08" stroke="#000080" stroke-width="0.2"/>
+<line x1="82.78" y1="102.92" x2="81.22" y2="105.08" stroke="#000080" stroke-width="0.2"/>
+<line x1="80.92" y1="103.22" x2="83.08" y2="104.78" stroke="#000080" stroke-width="0.2"/>
+<line x1="83.08" y1="103.22" x2="80.92" y2="104.78" stroke="#000080" stroke-width="0.2"/>
+        </svg>
+        <div class="altitude-bar">
+          <div class="alt-fill" id="alt-fill"></div>
+          <span class="alt-label" id="alt-label">0 km</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="traverse" class="section section--traverse">
+    <div class="traverse-glow"></div>
+
+    <div class="traverse-header">
+      <span class="sh-num">03</span>
+      <h2 class="traverse-title">207 DAYS<br /><em>IN THE VOID</em></h2>
+      <p class="traverse-sub">Earth is a pale dot. Mars, a faint ember. Nothing else exists.</p>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card" data-index="0">
+        <div class="stat-icon">◎</div>
+        <div class="stat-number">
+          <span class="counter" data-target="54600000" data-suffix="">0</span>
+        </div>
+        <div class="stat-unit">KM</div>
+        <div class="stat-label">Total Distance</div>
+        <div class="stat-detail">Earth–Mars at closest approach</div>
+      </div>
+      <div class="stat-card" data-index="1">
+        <div class="stat-icon">◷</div>
+        <div class="stat-number">
+          <span class="counter" data-target="207" data-suffix="">0</span>
+        </div>
+        <div class="stat-unit">DAYS</div>
+        <div class="stat-label">Transit Duration</div>
+        <div class="stat-detail">Hohmann transfer orbit</div>
+      </div>
+      <div class="stat-card" data-index="2">
+        <div class="stat-icon">↗</div>
+        <div class="stat-number">
+          <span class="counter" data-target="24600" data-suffix="">0</span>
+        </div>
+        <div class="stat-unit">KM/H</div>
+        <div class="stat-label">Cruise Speed</div>
+        <div class="stat-detail">Relative to the Sun</div>
+      </div>
+      <div class="stat-card" data-index="3">
+        <div class="stat-icon">☰</div>
+        <div class="stat-number">
+          <span class="counter" data-target="63" data-suffix="">0</span>
+        </div>
+        <div class="stat-unit">°C BELOW</div>
+        <div class="stat-label">Avg. Space Temp</div>
+        <div class="stat-detail">Between the planets</div>
+      </div>
+    </div>
+
+    <div class="mission-timeline">
+      <h3 class="timeline-heading">MISSION MILESTONES</h3>
+      <div class="timeline-track">
+        <div class="tl-node active" style="left:0%">
+          <div class="tl-dot"></div>
+          <div class="tl-content">
+            <span class="tl-day">DAY 0</span>
+            <span class="tl-event">Earth Departure</span>
+          </div>
+        </div>
+        <div class="tl-node" style="left:18%">
+          <div class="tl-dot"></div>
+          <div class="tl-content">
+            <span class="tl-day">DAY 37</span>
+            <span class="tl-event">Course Correction</span>
+          </div>
+        </div>
+        <div class="tl-node" style="left:38%">
+          <div class="tl-dot"></div>
+          <div class="tl-content">
+            <span class="tl-day">DAY 79</span>
+            <span class="tl-event">Mid-Point Check</span>
+          </div>
+        </div>
+        <div class="tl-node" style="left:62%">
+          <div class="tl-dot"></div>
+          <div class="tl-content">
+            <span class="tl-day">DAY 128</span>
+            <span class="tl-event">Asteroid Belt</span>
+          </div>
+        </div>
+        <div class="tl-node" style="left:82%">
+          <div class="tl-dot"></div>
+          <div class="tl-content">
+            <span class="tl-day">DAY 169</span>
+            <span class="tl-event">Mars Visible</span>
+          </div>
+        </div>
+        <div class="tl-node" style="left:100%">
+          <div class="tl-dot"></div>
+          <div class="tl-content">
+            <span class="tl-day">DAY 207</span>
+            <span class="tl-event">Mars Orbit</span>
+          </div>
+        </div>
+        <div class="tl-line"></div>
+        <div class="tl-progress" id="tl-progress"></div>
+      </div>
+    </div>
+
+    <div class="traverse-facts">
+      <div class="tfact">
+        <span class="tfact-icon">🛸</span>
+        <p>The crew burns 4× more calories than on Earth due to zero-gravity muscle maintenance protocols.</p>
+      </div>
+      <div class="tfact">
+        <span class="tfact-icon">☢️</span>
+        <p>Cosmic radiation exposure reaches 600 mSv — equivalent to 300 chest X-rays per astronaut.</p>
+      </div>
+      <div class="tfact">
+        <span class="tfact-icon">📡</span>
+        <p>At maximum separation, a radio signal from Earth takes up to 22 minutes to reach the crew.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="arrival" class="section section--arrival">
+    <canvas id="mars-canvas"></canvas>
+
+    <div class="arrival-content">
+      <div class="arrival-badge">MARS APPROACH — T-72 HOURS</div>
+      <span class="sh-num">04</span>
+      <h2 class="arrival-title">THE<br />RED PLANET</h2>
+      <p class="arrival-body">
+        After 207 days adrift in darkness, the crew encounters Mars —
+        a rust-coloured world of ancient volcanoes, frozen poles,
+        and the promise of a second cradle for humanity.
+      </p>
+
+      <div class="mars-specs">
+        <div class="spec-row">
+          <span class="spec-key">Diameter</span>
+          <span class="spec-bar-wrap"><span class="spec-bar" style="--pct:53%"></span></span>
+          <span class="spec-val">6,779 km</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-key">Gravity</span>
+          <span class="spec-bar-wrap"><span class="spec-bar" style="--pct:38%"></span></span>
+          <span class="spec-val">3.72 m/s²</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-key">Atmosphere</span>
+          <span class="spec-bar-wrap"><span class="spec-bar" style="--pct:6%"></span></span>
+          <span class="spec-val">0.6% of Earth</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-key">Day Length</span>
+          <span class="spec-bar-wrap"><span class="spec-bar" style="--pct:103%"></span></span>
+          <span class="spec-val">24h 37m</span>
+        </div>
+      </div>
+
+      <div class="arrival-tags">
+        <span class="atag">2 MOONS</span>
+        <span class="atag">-63°C AVG</span>
+        <span class="atag">95% CO₂</span>
+        <span class="atag">WATER ICE</span>
+      </div>
+    </div>
+
+    <div class="orbit-overlay">
+      <div class="orbit-ring ring-1"></div>
+      <div class="orbit-ring ring-2"></div>
+      <div class="moon phobos" title="Phobos"></div>
+      <div class="moon deimos" title="Deimos"></div>
+    </div>
+  </section>
+
+  <section id="exploration" class="section section--exploration">
+    <div class="exploration-bg"></div>
+
+    <div class="exploration-header">
+      <span class="sh-num">05</span>
+      <h2 class="exploration-title">EXPLORING<br /><em>A NEW WORLD</em></h2>
+      <p class="exploration-sub">Four extraordinary destinations await the first boots on Mars.</p>
+    </div>
+
+    <div class="explore-grid">
+      <div class="explore-card" data-loc="olympus">
+        <div class="card-inner">
+          <div class="card-front">
+            <span class="card-icon">🌋</span>
+            <h3 class="card-title">Olympus Mons</h3>
+            <p class="card-teaser">The largest volcano in the solar system</p>
+          </div>
+          <div class="card-back">
+            <h3 class="card-back-title">Olympus Mons</h3>
+            <ul class="card-facts">
+              <li>Height: <strong>21.9 km</strong> — 2.5× Everest</li>
+              <li>Diameter: <strong>624 km</strong></li>
+              <li>Caldera width: <strong>80 km</strong></li>
+              <li>Formed: <strong>~3.5 billion years ago</strong></li>
+            </ul>
+            <span class="card-cta">INVESTIGATE →</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="explore-card" data-loc="valles">
+        <div class="card-inner">
+          <div class="card-front">
+            <span class="card-icon">🏔️</span>
+            <h3 class="card-title">Valles Marineris</h3>
+            <p class="card-teaser">A canyon system that spans a continent</p>
+          </div>
+          <div class="card-back">
+            <h3 class="card-back-title">Valles Marineris</h3>
+            <ul class="card-facts">
+              <li>Length: <strong>4,000 km</strong></li>
+              <li>Width: <strong>200 km</strong></li>
+              <li>Depth: <strong>7 km</strong></li>
+              <li>Formed by: <strong>Tectonic rifting</strong></li>
+            </ul>
+            <span class="card-cta">INVESTIGATE →</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="explore-card" data-loc="poles">
+        <div class="card-inner">
+          <div class="card-front">
+            <span class="card-icon">❄️</span>
+            <h3 class="card-title">Polar Ice Caps</h3>
+            <p class="card-teaser">Frozen water and carbon dioxide reserves</p>
+          </div>
+          <div class="card-back">
+            <h3 class="card-back-title">Polar Ice Caps</h3>
+            <ul class="card-facts">
+              <li>Composition: <strong>H₂O + CO₂ ice</strong></li>
+              <li>North cap width: <strong>1,100 km</strong></li>
+              <li>Seasonal variation: <strong>±30%</strong></li>
+              <li>Water equivalent: <strong>2.85 × 10⁶ km³</strong></li>
+            </ul>
+            <span class="card-cta">INVESTIGATE →</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="explore-card" data-loc="rivers">
+        <div class="card-inner">
+          <div class="card-front">
+            <span class="card-icon">💧</span>
+            <h3 class="card-title">Ancient Deltas</h3>
+            <p class="card-teaser">Evidence of rivers that once flowed on Mars</p>
+          </div>
+          <div class="card-back">
+            <h3 class="card-back-title">Ancient River Deltas</h3>
+            <ul class="card-facts">
+              <li>Age: <strong>~3.7 billion years</strong></li>
+              <li>Best site: <strong>Jezero Crater</strong></li>
+              <li>Rover active: <strong>Perseverance</strong></li>
+              <li>Biosignature potential: <strong>High</strong></li>
+            </ul>
+            <span class="card-cta">INVESTIGATE →</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mission-end">
+      <div class="end-divider"></div>
+      <p class="end-quote">"The first footprints on Mars will be the most significant marks<br />left by human feet since those on the Moon."</p>
+      <span class="end-attr">— Carl Sagan</span>
+      <div class="end-cta-wrap">
+        <button class="btn-restart" id="btn-restart">↑ BACK TO LAUNCH PAD</button>
+      </div>
+    </div>
+
+    <footer class="site-footer">
+      <span>Frontend Odyssey · Journey to Mars · Built with Three.js + GSAP</span>
+    </footer>
+  </section>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>
