@@ -7,7 +7,7 @@
 
 ##  Live Demo
 
-🔗 **[View Live Experience →](https://YOUR-DEPLOYMENT-LINK-HERE)**
+🔗 **[View Live Experience →](https://insvanshu.github.io/Journey-to-Mars/)**
 
 ---
 
@@ -76,7 +76,7 @@ No build tools or npm needed. Just:
 
 1. Clone the repo
 ```bash
-   git clone https://github.com/YOUR_USERNAME/mars-odyssey.git
+   git clone https://github.com/INSVanshu/Journey-to-Mars.git
 ```
 2. Open `index.html` in any modern browser
 
@@ -98,4 +98,4 @@ No build tools or npm needed. Just:
 ## Author
 
 **Immadi Naga Sai Vanshika**
-- GitHub: [@yourusername](https://github.com/yourusername)
+- GitHub: [@INSVanshu](https://github.com/INSVanshu)
